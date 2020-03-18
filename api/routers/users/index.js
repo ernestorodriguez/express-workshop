@@ -1,10 +1,10 @@
 const { Router } = require('express');
+const { getUser } = require('../middlewares/user')
 const router = Router();
 
 
-router.get('/:id', (req, res) => {
-    res.json('user data');
-});
+router.get('/:id', getUser);
+
 router.patch('/:id',  (req, res) => {
     res.json('user data updated');
 });
