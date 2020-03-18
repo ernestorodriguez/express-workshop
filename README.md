@@ -8,4 +8,5 @@ Simple aplication with express, config, connected a mysql db, the main objective
 `npm run start-dev`
 
 you need to have mysql running in the default port.
+you can find a demo db on `data/book_store.sql`
 
