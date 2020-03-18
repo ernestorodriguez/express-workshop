@@ -1,9 +1,13 @@
-const db = require('./dataBaseService')
+const DBService = require('./DBService')
 
-class service  {
-    static getById(id) {
-        return db.getById('cliente', id);
+class UserService extends DBService  {
+    constructor() {
+        super({ table: 'cliente' });
+    }
+    
+    get() {
+        return Promise.reject('no puede acceder al listado de usuarios')
     }
 }
 
-module.exports = service;
+module.exports = new UserService();

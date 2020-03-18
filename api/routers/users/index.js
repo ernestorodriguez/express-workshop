@@ -1,18 +1,10 @@
 const { Router } = require('express');
-const { getUser } = require('../middlewares/user')
+const { getUser, updateUser, addUser, removeUser  } = require('../middlewares/user')
 const router = Router();
 
-
 router.get('/:id', getUser);
-
-router.patch('/:id',  (req, res) => {
-    res.json('user data updated');
-});
-router.post('/', (req, res) => {
-    res.json('new user added');
-});
-router.delete('/:id', (req, res) => {
-    res.json('user delete');
-});
+router.patch('/:id', updateUser);
+router.post('/', addUser);
+router.delete('/:id', removeUser);
 
 module.exports = router;
