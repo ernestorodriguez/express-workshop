@@ -10,16 +10,19 @@ const prepareQuery = (rawdata) => {
 }
 
 class DBService {
-    constructor({ table }) {
+    constructor({ table, joins, replacements, keys }) {
         this.table = table;
+        this.joins = joins;
+        this.keys = keys;
+        this.replacements = replacements;
     }
 
     get(pagination = {}) {
-        return db.get(this.table, pagination.start, pagination.end);
+        return db.get(this, pagination);
     }
 
     getById(id) {
-        return db.getById(this.table, id);
+        return db.getById(this, id);
     }
 
     add(rawdata) {

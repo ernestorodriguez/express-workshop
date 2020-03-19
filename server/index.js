@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const router = Router();
-const search = require('./pages/listing')
+const listing = require('./pages/listing');
+const { getBooks } = require('./middlewares/books')
 
 
 router.use('/login', (req,res) => {
     res.send('page');
 });
 
-router.use('/', search);
+router.use('/', getBooks, listing);
 
 router.use((error,req, res, next) => {
     if(error) {

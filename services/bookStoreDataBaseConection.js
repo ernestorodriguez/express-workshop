@@ -11,15 +11,41 @@ try {
   console.error('Unable to connect to the database:', error);
 }
 
-const get = (table) => {
-  let query =`SELECT * FROM ${table}`;
-  return sequelize.query(query,{
+const getJoinsQuery = (table, joins) => {
+  let result = ''
+  if(joins.length) {
+    const parseJoins = joins.map((join) => {
+      return `JOIN ${join.table} ON ${table}.${join.key} = ${join.table}.${join.keyTarget}`
+    });
+    result = `${parseJoins.join(', ')}`
+  }
+  return result;
+}
+
+const getKeys = (keys, replacements = []) => {
+  let result = keys ? keys.join(', ') : '*';
+  Object.keys(replacements).map((key) => {
+    result = result.replace(key, `${key} AS ${replacements[key]}`)
+  })
+  return result;
+}
+
+const get = ({ table, keys, replacements, joins = [] }, { start,  end}) => {
+  let query =`SELECT ${getKeys(keys, replacements)} FROM ${table} ${getJoinsQuery(table, joins)}`;
+  if (start != undefined) {
+    query += ` LIMIT ${start}`;
+    if (end) {
+      query += `, ${end}`;
+    }
+  }
+  return sequelize.query(query, {
     type:sequelize.QueryTypes.SELECT
   });
 }
 
-const getById = (table, id) => {
-  return sequelize.query(`SELECT * FROM ${table} WHERE id = ${id}`,{
+const getById = ({ table, keys, replacements, joins }, id) => {
+  const query = `SELECT ${getKeys(keys, replacements)} FROM ${table} ${getJoinsQuery(table, joins)} WHERE ${table}.id = ${id}`;
+  return sequelize.query(query, {
     type:sequelize.QueryTypes.SELECT
   });
 }
